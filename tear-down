@@ -1,0 +1,8 @@
+#!/bin/sh
+
+droplets=$(doctl compute droplet list -o json)
+
+echo $droplets | jq -c '.[]' | while read droplet; do
+  id=$(echo "$droplet" | jq -r '.id')
+  doctl compute droplet delete -f $id
+done

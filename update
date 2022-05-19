@@ -1,0 +1,5 @@
+#!/bin/sh
+
+ip=$(cat ip.txt)
+
+scp files/azauth root@$ip:/usr/local/bin/azauth

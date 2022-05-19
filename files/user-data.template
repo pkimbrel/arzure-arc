@@ -1,0 +1,24 @@
+#!/bin/sh
+
+apt install -y jq
+
+# Add the service principal application ID and secret here
+servicePrincipalClientId="_clientId"
+servicePrincipalSecret="_secret"
+
+# Download the installation package
+wget https://aka.ms/azcmagent -O install_linux_azcmagent.sh
+
+# Install the hybrid agent
+bash install_linux_azcmagent.sh
+
+# Run connect command
+azcmagent connect --service-principal-id "$servicePrincipalClientId" --service-principal-secret "$servicePrincipalSecret" --resource-group "digital_ocean" --tenant-id "3b1580ee-1c9c-4856-b8ba-52bf5219034d" --location "eastus" --subscription-id "e00499d3-9285-4183-8702-70ef128f19c7" --cloud "AzureCloud" --tags "Datacenter=digital_ocean_nyc1,City='New York',StateOrDistrict=NY,CountryOrRegion=US" --correlation-id "6d226712-ca34-43ee-ab16-51e40c394014"
+
+if [ $? = 0 ]; then echo -e "\033[33mTo view your onboarded server(s), navigate to https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.HybridCompute%2Fmachines\033[m"; fi
+
+cat > /usr/local/bin/azauth <<EOF
+_azauth
+EOF
+
+chmod +x /usr/local/bin/azauth
