@@ -22,4 +22,4 @@ secret=<secret>
 
 ## azauth
 
-This is a script that is deployed to the machine to generate an access token.  It's currently hard coded for an Azure Key Vault audience.
+This is a script that is deployed to the droplet to generate an access token.  It's currently hard coded for an Azure Key Vault audience.
