@@ -1,0 +1,27 @@
+#!/bin/sh
+
+servers=$(az resource list --query "[?type=='Microsoft.HybridCompute/machines']")
+
+echo $servers | jq -c '.[]' | while read server; do
+  id=$(echo "$server" | jq -r '.id')
+  name=$(echo "$server" | jq -r '.name')
+  principalId=$(echo "$server" | jq -r '.principalId')
+  resourceGroup=$(echo "$server" | jq -r '.resourceGroup')
+
+  echo ""
+  echo ""
+  echo $name
+  echo "-------------------------------------------"
+  echo ""
+  echo "principleId:"
+  echo $principalId
+  echo ""
+  echo "Provision Endpoint:"
+  echo "az rest --method put --uri https://management.azure.com$id/providers/Microsoft.HybridConnectivity/endpoints/default?api-version=2021-10-06-preview --body '{\"properties\": {\"type\": \"default\"}}'"
+  echo ""
+  echo "Confirm Endpoint:"
+  echo "az rest --method get --uri https://management.azure.com$id/providers/Microsoft.HybridConnectivity/endpoints/default?api-version=2021-10-06-preview"
+  echo ""
+  echo "SSH:"
+  echo "az ssh arc --resource-group $resourceGroup --vm-name $name"
+done

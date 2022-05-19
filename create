@@ -1,10 +1,15 @@
 #!/bin/sh
 
+uuid=$(uuidgen)
+suffix=${uuid:0:8}
+
+droplet_name="digital-ocean-nyc1-compute-$suffix"
+
 function servicePrincipal {
-    grep "${1}" service-principal.properties|cut -d'=' -f2
+  grep "${1}" service-principal.properties|cut -d'=' -f2
 }
 
-clientId=$(servicePrincipal 'clientId')
+client_id=$(servicePrincipal 'clientId')
 secret=$(servicePrincipal 'secret')
 
 azauth_raw=$(cat files/azauth)
@@ -12,19 +17,19 @@ azauth=${azauth_raw//$/\\$}
 
 user_data_raw=$(cat files/user-data.template)
 user_data_pre1=${user_data_raw/_azauth/$azauth}
-user_data_pre2=${user_data_pre1/_clientId/$clientId}
+user_data_pre2=${user_data_pre1/_clientId/$client_id}
 user_data=${user_data_pre2/_secret/$secret}
 
 echo "$user_data" > files/user-data
 
-# droplet=$(doctl compute droplet create \
-#   --image ubuntu-20-04-x64 \
-#   --region nyc1 \
-#   --size s-1vcpu-1gb \
-#   --ssh-keys 28094497 \
-#   --user-data-file ./files/user-data \
-#   --output json \
-#   --wait \
-#   digital-ocean-nyc1-compute)
+droplet=$(doctl compute droplet create \
+  --image ubuntu-20-04-x64 \
+  --region nyc1 \
+  --size s-1vcpu-1gb \
+  --ssh-keys 28094497 \
+  --user-data-file ./files/user-data \
+  --output json \
+  --wait \
+  $droplet_name)
 
-# echo $droplet | jq -r ".[0].networks.v4[0].ip_address" > ip.txt
+echo $droplet | jq -r ".[0].networks.v4[0].ip_address" > ip.txt

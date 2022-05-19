@@ -2,4 +2,4 @@
 
 ip=$(cat ip.txt)
 
-ssh root@ip
+ssh root@$ip

@@ -14,7 +14,9 @@ curl -s -D - -H Metadata:true "http://127.0.0.1:40342/metadata/identity/oauth2/t
 curl -s https://digital-ocean-key-vault.vault.azure.net/secrets/blueberry?api-version=2016-10-01 -H "Authorization: Bearer $token"
 
 
+# Server 
+azcmagent config set incomingconnections.ports 22
 
 
-
+# Admin
 az rest --method put --uri https://management.azure.com/subscriptions/e00499d3-9285-4183-8702-70ef128f19c7/resourceGroups/digital_ocean/providers/Microsoft.HybridCompute/machines/digital-ocean-nyc1-compute/providers/Microsoft.HybridConnectivity/endpoints/default?api-version=2021-10-06-preview --body '{"properties": {"type": "default"}}'
