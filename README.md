@@ -3,8 +3,8 @@
 Create file `service-principal.properties` to hold the automation principal credentials.
 
 ```
-clientId=&lt;client-id&gt;
-secret=&lt;secret&gt;
+clientId=<client-id>
+secret=<secret>
 ```
 
 ## Supporting tools
